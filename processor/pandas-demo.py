@@ -1,10 +1,9 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-from sqlalchemy import create_engine
 import pandas as pd
-
+from tools import db_tools
 # 获取数据库连接
-engine = create_engine('mysql+pymysql://root:12345678@localhost:3306/ip_pools')
+engine = db_tools.get_conn('db_ip')
 
 sql = "select * from ips"
 # read_sql_query的两个参数: sql语句， 数据库连接
