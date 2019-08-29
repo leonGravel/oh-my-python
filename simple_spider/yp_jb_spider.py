@@ -2,8 +2,7 @@
 
 import requests
 from bs4 import BeautifulSoup
-import xlwt
-
+import xlsxwriter 
 
 def request_page(url):
     try:
@@ -15,10 +14,13 @@ def request_page(url):
 
 
 def save_to_excel_dxy(soup):
-    book = xlwt.Workbook(encoding='gbk', style_compression=0)
-    sheet = book.add_sheet('药理分类汇总', cell_overwrite_ok=True)
-    sheet.write(0, 0, '药理分类')
-    sheet.write(0, 1, '药品类型')
+    workbook = xlsxwriter.Workbook('药理分类汇总.xlsx')
+    sheet = workbook.add_worksheet()
+    sheet.set_column('A:A', 20)
+    sheet.set_column('B:B', 30)
+
+    sheet.write('A1', '药理分类')
+    sheet.write('B1', '药品类型')
     n = 1
     list = soup.select('li[name = cur_cate]')
     for item in list:
@@ -37,12 +39,14 @@ def save_to_excel_dxy(soup):
             sheet.write(n, 1, durgs_item.find('a').get_text())
 
             n = n + 1
-        book.save(u'药理分类汇总.xlsx')
+    workbook.close()    
 
 
 def save_to_excel_mvyxws(soup):
-    book = xlwt.Workbook(encoding='gbk', style_compression=0)
-    sheet = book.add_sheet('疾病分类汇总', cell_overwrite_ok=True)
+    workbook = xlsxwriter.Workbook('疾病分类汇总.xlsx')
+    sheet = workbook.add_worksheet()
+    sheet.set_column('A:A', 20)
+    sheet.set_column('B:B', 30)
     sheet.write(0, 0, '疾病分类')
     sheet.write(0, 1, '疾病名称')
     n = 1
@@ -58,7 +62,7 @@ def save_to_excel_mvyxws(soup):
             sheet.write(n, 0, item_category)
             sheet.write(n, 1, durgs_item.get_text())
             n = n + 1
-        book.save(u'疾病分类汇总.xlsx')
+    workbook.close()    
 
 
 def get_dxy():
